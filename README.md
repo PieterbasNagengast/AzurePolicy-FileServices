@@ -1,4 +1,4 @@
-# Azure Policy: Storage Account File Services SMB settings (Append and Audit)
+# Azure Policy: Storage Account File Services SMB settings (Append and auditIfNotExists)
 
 ## Description
 
