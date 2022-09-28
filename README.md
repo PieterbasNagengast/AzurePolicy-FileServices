@@ -30,12 +30,5 @@ Deploy Policy initiative to Management Group or Subscription level:
 
 | Description | Bicep Template |
 |---|---|
-| Deploy to Azure Management Group| [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FPieterbasNagengast%2FAzurePolicy-DenySubnetSize%2Fmain%2FSubnetPolicy-MgmtGrp.json)|
-| Deploy to Azure Subscription | [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FPieterbasNagengast%2FAzurePolicy-DenySubnetSize%2Fmain%2FSubnetPolicy-Sub.json)|
-
-Deploy specific Policy definition to Management Group or Subscription level:
-
-| Description | Bicep Template |
-|---|---|
-| Deploy to Azure Management Group| [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FPieterbasNagengast%2FAzurePolicy-DenySubnetSize%2Fmain%2FSubnetPolicy-MgmtGrp.json)|
-| Deploy to Azure Subscription | [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FPieterbasNagengast%2FAzurePolicy-DenySubnetSize%2Fmain%2FSubnetPolicy-Sub.json)|
+| Deploy to Azure Management Group| [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FPieterbasNagengast%2FAzurePolicy-FileServices%2Fmain%2FARM%2Fmanagementgroup.json)|
+| Deploy to Azure Subscription | [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FPieterbasNagengast%2FAzurePolicy-FileServices%2Fmain%2FARM%2Fsubscription.json)|
