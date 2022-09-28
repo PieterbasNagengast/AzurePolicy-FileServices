@@ -112,10 +112,10 @@ resource smbPolicySet 'Microsoft.Authorization/policySetDefinitions@2021-06-01' 
           description: 'Enable or disable the execution of the policy.'
         }
         allowedValues: [
-          'audit'
+          'auditIfNotExists'
           'disabled'
         ]
-        defaultValue: 'audit'
+        defaultValue: 'auditIfNotExists'
       }
     }
     policyDefinitions: [

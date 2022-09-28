@@ -29,10 +29,10 @@ resource policy 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
           description: 'Enable or disable the execution of the policy.'
         }
         allowedValues: [
-          'audit'
+          'auditIfNotExists'
           'disabled'
         ]
-        defaultValue: 'audit'
+        defaultValue: 'auditIfNotExists'
       }
     }
     policyRule: {
@@ -40,16 +40,23 @@ resource policy 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
         allof: [
           {
             field: 'type'
-            equals: 'Microsoft.Storage/storageAccounts/fileServices'
-          }
-          {
-            field: 'Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.versions'
-            notEquals: '[parameters(\'smbVersions\')]'
+            equals: 'Microsoft.Storage/storageAccounts'
           }
         ]
       }
       then: {
         effect: '[parameters(\'effect\')]'
+        details: {
+          type: 'Microsoft.Storage/storageAccounts/fileServices'
+          existenceCondition: {
+            allof: [
+              {
+                field: 'Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.versions'
+                Equals: '[parameters(\'smbVersions\')]'
+              }
+            ]
+          }
+        }
       }
     }
   }

@@ -1,0 +1,956 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.8.9.13224",
+      "templateHash": "3301152830241328543"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/policySetDefinitions",
+      "apiVersion": "2021-06-01",
+      "name": "SMB-StorageAccount-FileServices",
+      "properties": {
+        "description": "Append and Audit SMB Settings for Storage Account File Services. Audits and Appends SMB Auhtentication Methods, SMB Versions, SMB Channel Encryption and SMB Keberos Ticket encryption. Append Policies sets SMB Settings for newly created Storage Accounts. Audit Policies audits existing Storage Account File Services SMB Settings.",
+        "displayName": "Storage Account File services SMB Settings",
+        "metadata": {
+          "category": "Storage"
+        },
+        "parameters": {
+          "smbVeersions": {
+            "type": "String",
+            "defaultValue": "SMB3.0;SMB3.1.1;",
+            "allowedValues": [
+              "SMB3.0;SMB3.1.1;",
+              "SMB3.1.1;"
+            ],
+            "metadata": {
+              "description": "SMB Version (SMB3.1.1 and/or SMB3.0)",
+              "displayName": "SMB Versions"
+            }
+          },
+          "smbChannelEncryption": {
+            "type": "String",
+            "defaultValue": "AES-128-GCM;AES-256-GCM;",
+            "allowedValues": [
+              "AES-128-GCM;AES-256-GCM;",
+              "AES-128-CCM;AES-128-GCM;AES-256-GCM;"
+            ],
+            "metadata": {
+              "description": "SMB channel encryption (AES-128-CCM;AES-128-GCM;AES-256-GCM)",
+              "displayName": "SMB channel encryption"
+            }
+          },
+          "smbKerberosTicketEncryption": {
+            "type": "String",
+            "defaultValue": "AES-256;",
+            "allowedValues": [
+              "RC4-HMAC;AES-256;",
+              "AES-256;"
+            ],
+            "metadata": {
+              "description": "SMB kerberos ticket encryption (NTLMv2 and/or Kerberos)",
+              "displayName": "SMB kerberos ticket encryption"
+            }
+          },
+          "smbAuthMethods": {
+            "type": "String",
+            "defaultValue": "Kerberos;",
+            "allowedValues": [
+              "NTLMv2;",
+              "NTLMv2;Kerberos;",
+              "Kerberos;"
+            ],
+            "metadata": {
+              "description": "SMB authentication methods (NTLMv2 and/or Kerberos)",
+              "displayName": "SMB authentication methods"
+            }
+          },
+          "smbAppendEffect": {
+            "type": "String",
+            "metadata": {
+              "displayName": "SMB Effect for Append policy",
+              "description": "Enable or disable the execution of the policy."
+            },
+            "allowedValues": [
+              "append",
+              "disabled"
+            ],
+            "defaultValue": "append"
+          },
+          "smbAuditEffect": {
+            "type": "String",
+            "metadata": {
+              "displayName": "SMB Effect for Audit policy",
+              "description": "Enable or disable the execution of the policy."
+            },
+            "allowedValues": [
+              "auditIfNotExists",
+              "disabled"
+            ],
+            "defaultValue": "auditIfNotExists"
+          }
+        },
+        "policyDefinitions": [
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-Version-Policy-Definition-Append')).outputs.policyID.value]",
+            "parameters": {
+              "smbVersions": {
+                "value": "[[parameters('smbVeersions')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAppendEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-ChannelEncryption-Policy-Definition-Append')).outputs.policyID.value]",
+            "parameters": {
+              "smbChannelEncryption": {
+                "value": "[[parameters('smbChannelEncryption')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAppendEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-KerberosTicketEncryption-Policy-Definition-Append')).outputs.policyID.value]",
+            "parameters": {
+              "smbKerberosTicketEncryption": {
+                "value": "[[parameters('smbKerberosTicketEncryption')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAppendEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-AuthenticationMethods-Policy-Definition-Append')).outputs.policyID.value]",
+            "parameters": {
+              "smbAuthMethods": {
+                "value": "[[parameters('smbAuthMethods')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAppendEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-Version-Policy-Definition-Audit')).outputs.policyID.value]",
+            "parameters": {
+              "smbVersions": {
+                "value": "[[parameters('smbVeersions')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAuditEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-ChannelEncryption-Policy-Definition-Audit')).outputs.policyID.value]",
+            "parameters": {
+              "smbChannelEncryption": {
+                "value": "[[parameters('smbChannelEncryption')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAuditEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-KerberosTicketEncryption-Policy-Definition-Audit')).outputs.policyID.value]",
+            "parameters": {
+              "smbKerberosTicketEncryption": {
+                "value": "[[parameters('smbKerberosTicketEncryption')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAuditEffect')]"
+              }
+            }
+          },
+          {
+            "policyDefinitionId": "[reference(extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-AuthenticationMethods-Policy-Definition-Audit')).outputs.policyID.value]",
+            "parameters": {
+              "smbAuthMethods": {
+                "value": "[[parameters('smbAuthMethods')]"
+              },
+              "effect": {
+                "value": "[[parameters('smbAuditEffect')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-AuthenticationMethods-Policy-Definition-Append')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-AuthenticationMethods-Policy-Definition-Audit')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-ChannelEncryption-Policy-Definition-Append')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-ChannelEncryption-Policy-Definition-Audit')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-KerberosTicketEncryption-Policy-Definition-Append')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-KerberosTicketEncryption-Policy-Definition-Audit')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-Version-Policy-Definition-Append')]",
+        "[extensionResourceId(managementGroup().id, 'Microsoft.Resources/deployments', 'Deploy-SMB-Version-Policy-Definition-Audit')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-Version-Policy-Definition-Append",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "2477358504566308720"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-Version-StorageAccount-FileServices-APPEND",
+              "properties": {
+                "description": "SMB Version for Storage Account File Services. Append Storage Account File services SMB version v3.0 or v3.0 and v3.11",
+                "displayName": "Append SMB Version for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbVersions": {
+                    "type": "String",
+                    "defaultValue": "SMB3.0;SMB3.1.1;",
+                    "allowedValues": [
+                      "SMB3.0;SMB3.1.1;",
+                      "SMB3.1.1;"
+                    ],
+                    "metadata": {
+                      "description": "SMB Version (SMB3.1.1 and/or SMB3.0)",
+                      "displayName": "SMB Versions"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "append",
+                      "disabled"
+                    ],
+                    "defaultValue": "append"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts/fileServices"
+                      },
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.versions",
+                        "exists": false
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": [
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.versions",
+                        "value": "[[parameters('smbVersions')]"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-Version-StorageAccount-FileServices-APPEND')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-ChannelEncryption-Policy-Definition-Append",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "18119824863206439546"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-ChannelEncryption-StorageAccount-FileServices-APPEND",
+              "properties": {
+                "description": "SMB Channel encryption for Storage Account File Services. Append SMB Channel encryption to: AES-128-GCM;AES-256-GCM or AES-128-CCM;AES-128-GCM;AES-256-GCM",
+                "displayName": "Append SMB Channel encryption for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbChannelEncryption": {
+                    "type": "String",
+                    "defaultValue": "AES-128-GCM;AES-256-GCM;",
+                    "allowedValues": [
+                      "AES-128-GCM;AES-256-GCM;",
+                      "AES-128-CCM;AES-128-GCM;AES-256-GCM;"
+                    ],
+                    "metadata": {
+                      "description": "SMB channel encryption (AES-128-CCM;AES-128-GCM;AES-256-GCM)",
+                      "displayName": "SMB channel encryption"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "append",
+                      "disabled"
+                    ],
+                    "defaultValue": "append"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts/fileServices"
+                      },
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.channelEncryption",
+                        "exists": false
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": [
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.channelEncryption",
+                        "value": "[[parameters('smbChannelEncryption')]"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-ChannelEncryption-StorageAccount-FileServices-APPEND')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-KerberosTicketEncryption-Policy-Definition-Append",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "13841515397371156657"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-KerberosTicketEncryption-StorageAccount-FileServices-APPEND",
+              "properties": {
+                "description": "SMB Kerberos Ticket encryption for Storage Account File Services. Append SMB Ticket encryption to: RC4-HMAC and/or AES-256",
+                "displayName": "Append SMB Kerberos Ticket encryption for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbKerberosTicketEncryption": {
+                    "type": "String",
+                    "defaultValue": "AES-256;",
+                    "allowedValues": [
+                      "RC4-HMAC;AES-256;",
+                      "AES-256;"
+                    ],
+                    "metadata": {
+                      "description": "SMB kerberos ticket encryption (NTLMv2 and/or Kerberos)",
+                      "displayName": "SMB kerberos ticket encryption"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "append",
+                      "disabled"
+                    ],
+                    "defaultValue": "append"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts/fileServices"
+                      },
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.kerberosTicketEncryption",
+                        "exists": false
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": [
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.kerberosTicketEncryption",
+                        "value": "[[parameters('smbKerberosTicketEncryption')]"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-KerberosTicketEncryption-StorageAccount-FileServices-APPEND')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-AuthenticationMethods-Policy-Definition-Append",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "13943502403542343084"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-AuhtenticationMethods-StorageAccount-FileServices-APPEND",
+              "properties": {
+                "description": "SMB Authentication methods for Storage Account File Services. Audit or Append SMB Authentication methods to: NTLMv2, Kerberos or NTLMv2 and Kerberos",
+                "displayName": "Append SMB Authentication methods for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbAuthMethods": {
+                    "type": "String",
+                    "defaultValue": "Kerberos;",
+                    "allowedValues": [
+                      "NTLMv2;",
+                      "NTLMv2;Kerberos;",
+                      "Kerberos;"
+                    ],
+                    "metadata": {
+                      "description": "SMB authentication methods (NTLMv2 and/or Kerberos)",
+                      "displayName": "SMB authentication methods"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "append",
+                      "disabled"
+                    ],
+                    "defaultValue": "append"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts/fileServices"
+                      },
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.authenticationMethods",
+                        "exists": false
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": [
+                      {
+                        "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.authenticationMethods",
+                        "value": "[[parameters('smbAuthMethods')]"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-AuhtenticationMethods-StorageAccount-FileServices-APPEND')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-Version-Policy-Definition-Audit",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "8679656791591724079"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-Version-StorageAccount-FileServices-AUDIT",
+              "properties": {
+                "description": "SMB Version for Storage Account File Services. Audit Storage Account File services SMB version v3.0 or v3.0 and v3.11",
+                "displayName": "Audit SMB Version for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbVersions": {
+                    "type": "String",
+                    "defaultValue": "SMB3.0;SMB3.1.1;",
+                    "allowedValues": [
+                      "SMB3.0;SMB3.1.1;",
+                      "SMB3.1.1;"
+                    ],
+                    "metadata": {
+                      "description": "SMB Version (SMB3.1.1 and/or SMB3.0)",
+                      "displayName": "SMB Versions"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "auditIfNotExists",
+                      "disabled"
+                    ],
+                    "defaultValue": "auditIfNotExists"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": {
+                      "type": "Microsoft.Storage/storageAccounts/fileServices",
+                      "existenceCondition": {
+                        "allof": [
+                          {
+                            "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.versions",
+                            "Equals": "[[parameters('smbVersions')]"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-Version-StorageAccount-FileServices-AUDIT')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-ChannelEncryption-Policy-Definition-Audit",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "595919775176459922"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-ChannelEncryption-StorageAccount-FileServices-AUDIT",
+              "properties": {
+                "description": "SMB Channel encryption for Storage Account File Services. Audit SMB Channel encryption to: AES-128-GCM;AES-256-GCM or AES-128-CCM;AES-128-GCM;AES-256-GCM",
+                "displayName": "Audit SMB Channel encryption for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbChannelEncryption": {
+                    "type": "String",
+                    "defaultValue": "AES-128-GCM;AES-256-GCM;",
+                    "allowedValues": [
+                      "AES-128-GCM;AES-256-GCM;",
+                      "AES-128-CCM;AES-128-GCM;AES-256-GCM;"
+                    ],
+                    "metadata": {
+                      "description": "SMB channel encryption (AES-128-CCM;AES-128-GCM;AES-256-GCM)",
+                      "displayName": "SMB channel encryption"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "auditIfNotExists",
+                      "disabled"
+                    ],
+                    "defaultValue": "auditIfNotExists"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": {
+                      "type": "Microsoft.Storage/storageAccounts/fileServices",
+                      "existenceCondition": {
+                        "allof": [
+                          {
+                            "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.channelEncryption",
+                            "Equals": "[[parameters('smbChannelEncryption')]"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-ChannelEncryption-StorageAccount-FileServices-AUDIT')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-KerberosTicketEncryption-Policy-Definition-Audit",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "1193612027140474086"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-KerberosTicketEncryption-StorageAccount-FileServices-AUDIT",
+              "properties": {
+                "description": "SMB Kerberos Ticket encryption for Storage Account File Services. Audit SMB Ticket encryption to: RC4-HMAC and/or AES-256; ",
+                "displayName": "Audit SMB Kerberos Ticket encryption for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbKerberosTicketEncryption": {
+                    "type": "String",
+                    "defaultValue": "AES-256;",
+                    "allowedValues": [
+                      "RC4-HMAC;AES-256;",
+                      "AES-256;"
+                    ],
+                    "metadata": {
+                      "description": "SMB kerberos ticket encryption (NTLMv2 and/or Kerberos)",
+                      "displayName": "SMB kerberos ticket encryption"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "auditIfNotExists",
+                      "disabled"
+                    ],
+                    "defaultValue": "auditIfNotExists"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": {
+                      "type": "Microsoft.Storage/storageAccounts/fileServices",
+                      "existenceCondition": {
+                        "allof": [
+                          {
+                            "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.kerberosTicketEncryption",
+                            "Equals": "[[parameters('smbKerberosTicketEncryption')]"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-KerberosTicketEncryption-StorageAccount-FileServices-AUDIT')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "Deploy-SMB-AuthenticationMethods-Policy-Definition-Audit",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "507309101665026052"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/policyDefinitions",
+              "apiVersion": "2021-06-01",
+              "name": "SMB-AuhtenticationMethods-StorageAccount-FileServices-AUDIT",
+              "properties": {
+                "description": "SMB Authentication methods for Storage Account File Services. Audit SMB Authentication methods to: NTLMv2, Kerberos or NTLMv2 and Kerberos",
+                "displayName": "Audit SMB Authentication methods for Storage Account File Services",
+                "mode": "All",
+                "metadata": {
+                  "category": "Storage"
+                },
+                "parameters": {
+                  "smbAuthMethods": {
+                    "type": "String",
+                    "defaultValue": "Kerberos;",
+                    "allowedValues": [
+                      "NTLMv2;",
+                      "NTLMv2;Kerberos;",
+                      "Kerberos;"
+                    ],
+                    "metadata": {
+                      "description": "SMB authentication methods (NTLMv2 and/or Kerberos)",
+                      "displayName": "SMB authentication methods"
+                    }
+                  },
+                  "effect": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Effect",
+                      "description": "Enable or disable the execution of the policy."
+                    },
+                    "allowedValues": [
+                      "auditIfNotExists",
+                      "disabled"
+                    ],
+                    "defaultValue": "auditIfNotExists"
+                  }
+                },
+                "policyRule": {
+                  "if": {
+                    "allof": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]",
+                    "details": {
+                      "type": "Microsoft.Storage/storageAccounts/fileServices",
+                      "existenceCondition": {
+                        "allof": [
+                          {
+                            "field": "Microsoft.Storage/storageAccounts/fileServices/protocolSettings.smb.authenticationMethods",
+                            "Equals": "[[parameters('smbAuthMethods')]"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "policyID": {
+              "type": "string",
+              "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policyDefinitions', 'SMB-AuhtenticationMethods-StorageAccount-FileServices-AUDIT')]"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "PolicySetID": {
+      "type": "string",
+      "value": "[extensionResourceId(managementGroup().id, 'Microsoft.Authorization/policySetDefinitions', 'SMB-StorageAccount-FileServices')]"
+    }
+  }
+}
